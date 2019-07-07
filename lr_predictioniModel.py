@@ -35,16 +35,17 @@ df_numerical.info()
 # ap = pd.DataFrame(age_position)
 # ap
 
-df_string['Nationality'] = df_string['Nationality'].astype('category')  # convert to categorical for memory
+# df_string['Nationality'] = df_string['Nationality'].astype('category')  # convert to categorical for memory
 df['Nationality'] = df_string['Nationality'].astype('category')     # convert to categorical for memory
 # df.Nationality = df.Nationality.astype('category') #alternaitive as above convert to category
 
 
 
-df['Age'] = pd.to_numeric(df['Age'], errors='coerce')  #  account for any nan in Age column
+df['Age'] = pd.to_numeric(df['Age'], errors = 'coerce')   #  account for any nan in Age column
 
-#Convert categorical data to integers
-def recode_position(position):
+"""Function to Convert categorical data to integers. Note: you can use encoder or pandas dummy as well"""
+
+def  recode_position(position):
     if position == 'ST':
         return 1
     elif position == 'CB':
@@ -52,8 +53,22 @@ def recode_position(position):
     else:
         return np.nan
 
-#apply function to recode position
+# apply function to recode position
 df.columns
-df['recode'] = df['PreferredPositions'].apply(recode_position) #apply function
+df['recode'] = df['PreferredPositions'].apply(recode_position)  # apply function
 
+""" using lambda function to add """
+df['Aging'] = df['Age'].apply(lambda x: x+1)
+
+""" Replace CDM CM with CDM = Center defensive midfield"""
+df['newPosn'] = df['PreferredPositions'].apply(lambda x: x.replace('CDM CM', 'CDM'))
+
+df.drop_duplicates()    # to drop duplicates
+
+""" checking for null values"""
+df.isnull().values.any()
+df.isnull().any()
+df.isnull().sum().sum()
+
+df['Acceleration2'] = df['Acceleration'].fillna(df['Acceleration'].mean())  # replace null values with mean
 

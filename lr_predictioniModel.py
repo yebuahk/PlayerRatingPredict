@@ -68,7 +68,45 @@ df.drop_duplicates()    # to drop duplicates
 """ checking for null values"""
 df.isnull().values.any()
 df.isnull().any()
+df.isnull().sum()
 df.isnull().sum().sum()
 
 df['Acceleration2'] = df['Acceleration'].fillna(df['Acceleration'].mean())  # replace null values with mean
+
+""" fill null values with mean of specific column values"""
+# eng = df.loc[df['Nationality'] == 'England']
+# nm = eng['Age'].mean()
+#
+# df.loc[df['Nationality'] == 'England'].fillna(nm)
+#
+# df.dropna()
+# df.to_csv('c_fifa.csv')
+
+from sklearn.model_selection import train_test_split
+train, validation = train_test_split(df, test_size=0.30, random_state=5)
+
+""" 70/50 split of data for test and validation"""
+train.shape
+validation.shape
+
+""" will use below to train smaller data set"""
+# from sklearn.model_selection import LeaveOneOut
+# loo = LeaveOneOut()
+# loo.split(df)
+#
+# df.head()
+#
+# X = df.iloc[:, 1:]   # all rows with columns starting from 2
+# X.head()
+#
+# y = df['Overall']
+# y.head()
+#
+# for train_index, test_index in loo.split(X):
+#     print('train : ', train_index, 'test : ', test_index)
+#     X_train, X_test = X[train_index], X[test_index]
+#     y_train, y_test = y[train_index], y[test_index]
+
+
+
 

@@ -30,28 +30,11 @@ df_numerical = df.select_dtypes(exclude=['object'])     # separate any numerical
 df_numerical.shape  # same rows and columns as df.shape meaning all columns contain integers
 
 df_numerical.info()
-#
-# age_position = df['Preferred Positions'].groupby(df['Age'])
-# ap = pd.DataFrame(age_position)
-# ap
 
-# df_string['Nationality'] = df_string['Nationality'].astype('category')  # convert to categorical for memory
 df['Nationality'] = df_string['Nationality'].astype('category')     # convert to categorical for memory
-# df.Nationality = df.Nationality.astype('category') #alternaitive as above convert to category
-
-
 
 df['Age'] = pd.to_numeric(df['Age'], errors = 'coerce')   #  account for any nan in Age column
 
-"""Function to Convert categorical data to integers. Note: you can use encoder or pandas dummy as well"""
-
-def  recode_position(position):
-    if position == 'ST':
-        return 1
-    elif position == 'CB':
-        return 0
-    else:
-        return np.nan
 
 # apply function to recode position
 df.columns
@@ -73,39 +56,21 @@ df.isnull().sum().sum()
 
 df['Acceleration2'] = df['Acceleration'].fillna(df['Acceleration'].mean())  # replace null values with mean
 
-""" fill null values with mean of specific column values"""
-# eng = df.loc[df['Nationality'] == 'England']
-# nm = eng['Age'].mean()
-#
-# df.loc[df['Nationality'] == 'England'].fillna(nm)
-#
-# df.dropna()
-# df.to_csv('c_fifa.csv')
+X = df.iloc[:, 1:]   # all rows with columns starting from 2
+y = df['Overall']
 
 from sklearn.model_selection import train_test_split
 train, validation = train_test_split(df, test_size=0.30, random_state=5)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=5)
 
-""" 70/50 split of data for test and validation"""
-train.shape
-validation.shape
+# Check classification accuracy with KNN=5
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import metrics
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+print(metrics.accuracy_score(y_test, y_pred))
 
-""" will use below to train smaller data set"""
-# from sklearn.model_selection import LeaveOneOut
-# loo = LeaveOneOut()
-# loo.split(df)
-#
-# df.head()
-#
-# X = df.iloc[:, 1:]   # all rows with columns starting from 2
-# X.head()
-#
-# y = df['Overall']
-# y.head()
-#
-# for train_index, test_index in loo.split(X):
-#     print('train : ', train_index, 'test : ', test_index)
-#     X_train, X_test = X[train_index], X[test_index]
-#     y_train, y_test = y[train_index], y[test_index]
 
 
 

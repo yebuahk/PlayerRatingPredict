@@ -72,6 +72,27 @@ y_pred = knn.predict(X_test)
 print(metrics.accuracy_score(y_test, y_pred))
 
 
+from sklearn.model_selection import KFold
+X = df.iloc[:, 1:]   # all rows with columns starting from 2
+y = df['Overall']
+
+kf = KFold(n_splits=5, random_state=None, shuffle=False)
+kf.get_n_splits(X)
+
+for train_index, test_index in kf.split(X):
+    print('train : ', train_index, 'test : ', test_index)
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
 
 
+from sklearn.model_selection import StratifiedKFold
+X = df.iloc[:, 1:]   # all rows with columns starting from 2
+y = df['Overall']
 
+skf = StratifiedKFold(n_splits=5, random_state=None)
+skf.get_n_splits(X)
+
+for train_index, test_index in skf.split(X, y):
+    print('train : ', train_index, 'test : ', test_index)
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]

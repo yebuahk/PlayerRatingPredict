@@ -22,7 +22,8 @@ df['Overall'].value_counts(dropna=False)    # count number of values in column e
 df['Finishing'].value_counts(dropna=True)   # set dropna to True to include n/a in count
 
 df.dtypes   # data types check
-df.get_dtype_counts()   # data types count
+df.get_dtype_counts()   # data types count this is deprecated
+df.dtypes.value_counts() # data type count
 
 df_string = df.select_dtypes(include=['object'])    # separate any stings
 df_string.shape
